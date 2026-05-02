@@ -6,9 +6,21 @@ import DashboardPage from "./pages/DashboardPage";
 export default function App() {
   const [activePage, setActivePage] = useState("login");
   const [user, setUser] = useState(() => {
+  try {
     const storedUser = localStorage.getItem("loggedInUser");
-    return storedUser ? JSON.parse(storedUser) : null;
-  });
+
+    if (!storedUser || storedUser === "undefined") {
+      return null;
+    }
+
+    return JSON.parse(storedUser);
+
+  } catch (error) {
+    console.error("Invalid stored user:", error);
+    localStorage.removeItem("loggedInUser");
+    return null;
+  }
+});
 
   let content;
   if (user) {
