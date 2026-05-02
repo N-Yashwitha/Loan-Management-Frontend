@@ -8,6 +8,7 @@ const initialState = {
 };
 
 export default function LoginPage({ onLogin, onSwitch }) {
+
   const [formData, setFormData] = useState(initialState);
 
   const handleChange = (event) => {
@@ -18,21 +19,37 @@ export default function LoginPage({ onLogin, onSwitch }) {
   };
 
   const handleSubmit = async (event) => {
+
     event.preventDefault();
 
- const response = await apiFetch("/auth/login", {
-  method: "POST",
-  body: JSON.stringify(formData)
-});
+    try {
 
-localStorage.setItem("token", response.token);
-localStorage.setItem(
-  "loggedInUser",
-  JSON.stringify(response.user)
-);
+      const response = await apiFetch("/auth/login", {
+        method: "POST",
+        body: JSON.stringify(formData)
+      });
 
-alert("Login successful");
-onLogin(response.user);
+      console.log("Login response:", response);
+
+      localStorage.setItem("token", response.token);
+
+      // handle both response formats
+      const userData = response.user || response;
+
+      localStorage.setItem(
+        "loggedInUser",
+        JSON.stringify(userData)
+      );
+
+      alert("Login successful");
+
+      onLogin(userData);
+
+    } catch (error) {
+
+      alert(error.message);
+
+    }
   };
 
   return (
