@@ -1,4 +1,4 @@
-const API_BASE_URL = "https://loan-management-backend-k5kj.onrender.com";
+const API_BASE_URL = "https://loan-management-backend-k5kj.onrender.com/api";
 
 async function handleResponse(response) {
 
